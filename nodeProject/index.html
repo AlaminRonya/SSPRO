@@ -8,10 +8,37 @@
 </head>
 <body>
     <h1>Welcome to My Node Project</h1>
-    <form id="searchForm" class="d-flex">
+    
+    <!-- Form to add a new student -->
+    <form id="createForm" class="mb-4">
+        <div class="mb-3">
+            <label for="id" class="form-label">FId</label>
+            <input type="text" class="form-control" id="id" required>
+        </div>
+        <div class="mb-3">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" required>
+        </div>
+        <div class="mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="department" class="form-label">Department</label>
+            <input type="text" class="form-control" id="department" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Student</button>
+    </form>
+
+    <form id="searchForm" class="d-flex mb-4">
         <input id="searchInput" class="form-control me-2" type="search" placeholder="Search by ID" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
+    
     <table class="table">
         <thead>
           <tr>
@@ -36,6 +63,18 @@
         event.preventDefault(); // Prevent the form from submitting the traditional way
         const id = document.getElementById('searchInput').value;
         fetchUserById(id);
+    });
+
+    document.getElementById('createForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the form from submitting the traditional way
+        const newStudent = {
+            id: document.getElementById('id').value,
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            email: document.getElementById('email').value,
+            department: document.getElementById('department').value
+        };
+        createUser(newStudent);
     });
 
     function fetchUserById(id) {
@@ -65,6 +104,37 @@
                 errorMessage.style.display = 'block';
                 errorMessage.textContent = error.message;
             });
+    }
+
+    function createUser(student) {
+        fetch('http://localhost:9192/api/v1/student', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization" : "JWT_BEAR"
+            },
+            body: JSON.stringify(student)
+        })
+        .then(response => response.json())
+        .then(newStudent => {
+            const tableBody = document.getElementById('userTableBody');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <th scope="row">${newStudent.id}</th>
+                <td>${newStudent.firstName}</td>
+                <td>${newStudent.lastName}</td>
+                <td>${newStudent.email}</td>
+                <td>${newStudent.department}</td>
+            `;
+            tableBody.appendChild(row);
+            document.getElementById('createForm').reset(); // Reset the form
+            document.getElementById('error-message').style.display = 'none'; // Hide error message
+        })
+        .catch(error => {
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.style.display = 'block';
+            errorMessage.textContent = 'Error creating student: ' + error.message;
+        });
     }
 
     // Fetch all users on page load (optional, if you want to show all users initially)

@@ -4,12 +4,10 @@ import com.alamin.testdemo.dto.StudentDTO;
 import com.alamin.testdemo.store.DataStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -44,6 +42,25 @@ public class HomeController {
         }
 
 
+
+    }
+
+    @CrossOrigin(
+            origins = {"http://localhost:3000", "http://localhost:4000"},
+            methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
+            maxAge = 10,
+            allowedHeaders = {HttpHeaders.CONTENT_TYPE, HttpHeaders.AUTHORIZATION}
+    )
+    @PostMapping("/api/v1/student")
+    public ResponseEntity<?> studentByID(@RequestBody StudentDTO dto){
+        DataStore.addStudentDTO(dto);
+        System.out.println(DataStore.getStudentDTOList());
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+
+    }
+    @DeleteMapping
+    public ResponseEntity<?> deleteStudent(@PathVariable Long id){
+        return new ResponseEntity<>("Student with ID " + id + " not found.", HttpStatus.OK);
 
     }
 

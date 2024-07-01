@@ -27,6 +27,7 @@ public class DataStore {
         DataStore.studentDTOList = studentDTOList;
     }
     public static void addStudentDTO(StudentDTO studentDTO) {
+        System.out.println(studentDTO);
         if (studentDTO == null){
             return;
         }
