@@ -48,14 +48,18 @@ public class HomeController {
     @CrossOrigin(
             origins = {"http://localhost:3000", "http://localhost:4000"},
             methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
-            maxAge = 10,
+            exposedHeaders = {"custom-header"},
+            allowCredentials = "true",
+            maxAge = 10, //Second of time for preflight
             allowedHeaders = {HttpHeaders.CONTENT_TYPE, HttpHeaders.AUTHORIZATION}
     )
     @PostMapping("/api/v1/student")
     public ResponseEntity<?> studentByID(@RequestBody StudentDTO dto){
         DataStore.addStudentDTO(dto);
         System.out.println(DataStore.getStudentDTOList());
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        return ResponseEntity.ok().header(
+                "custom-header" ,"Simple custom header"
+        ).body(dto);
 
     }
     @DeleteMapping
