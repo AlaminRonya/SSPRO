@@ -12,7 +12,7 @@ spring:
     import: optional:configserver:http://location:8888
   application:
     name: customer-service
-  .jpa:
+  jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
