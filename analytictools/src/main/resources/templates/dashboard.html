@@ -51,6 +51,9 @@
 </div>
 
 <script>
+    let request_count_chart;
+    let page_visit_chart;
+
     function fetchAndPopulateStat() {
         /*
         stats:
@@ -98,6 +101,7 @@
     }
 
     function populateTable(tableRows) {
+        $("#stat-table").empty();
         $("#stat-table").append(tableRows);
     }
 
@@ -106,8 +110,138 @@
         reqCountByTime.forEach(function (val, key) {
             data.push([key, val]);
         });
+        request_count_chart.series[0].setData(Array.from(
+            data
+        ));
 
-        Highcharts.chart('request-count-chart', {
+        // Highcharts.chart('request-count-chart', {
+        //     chart: {
+        //         type: 'column'
+        //     },
+        //     title: {
+        //         text: 'Requests Count VS Time Stat'
+        //     },
+        //     subtitle: {
+        //
+        //         text: 'This chart is showing the total amount of request per seconds'
+        //     },
+        //     xAxis: {
+        //         type: 'category',
+        //         labels: {
+        //             autoRotation: [-45, -90],
+        //             style: {
+        //                 fontSize: '13px',
+        //                 fontFamily: 'Verdana, sans-serif'
+        //             }
+        //         }
+        //     },
+        //     yAxis: {
+        //         min: 0,
+        //         title: {
+        //             text: 'Request Counts'
+        //         }
+        //     },
+        //     legend: {
+        //         enabled: false
+        //     },
+        //     tooltip: {
+        //         pointFormat: 'total request <b>{point.y}</b>'
+        //     },
+        //     series: [{
+        //         name: 'Request Count VS Time',
+        //         colorByPoint: true,
+        //         groupPadding: 0,
+        //         data: data,
+        //         dataLabels: {
+        //             enabled: true,
+        //             rotation: -90,
+        //             color: '#FFFFFF',
+        //             inside: true,
+        //             verticalAlign: 'top',
+        //             format: '{point.y:.1f}', // one decimal
+        //             y: 10, // 10 pixels down from the top
+        //             style: {
+        //                 fontSize: '13px',
+        //                 fontFamily: 'Verdana, sans-serif'
+        //             }
+        //         }
+        //     }]
+        // });
+
+
+
+    }
+
+    function populatePageVisitChart(pageVisitCount) {
+        let data = [];
+        pageVisitCount.forEach(function (val, key){
+            data.push({name: key, y: val});
+        });
+
+        page_visit_chart.series[0].setData(Array.from(data));
+
+        // Highcharts.chart('page-visit-chart', {
+        //     chart: {
+        //         type: 'pie'
+        //     },
+        //     title: {
+        //         text: 'Page Visit Stat',
+        //     },
+        //     subtitle: {
+        //         text: 'This chat is showing the specific "page visit" count',
+        //     },
+        //
+        //     accessibility: {
+        //         announceNewData: {
+        //             enabled: true
+        //         },
+        //         point: {
+        //             valueSuffix: ''
+        //         }
+        //     },
+        //
+        //     plotOptions: {
+        //         series: {
+        //             borderRadius: 5,
+        //             dataLabels: [{
+        //                 enabled: true,
+        //                 distance: 15,
+        //                 format: '{point.name}'
+        //             }, {
+        //                 enabled: true,
+        //                 distance: '-30%',
+        //                 filter: {
+        //                     property: 'percentage',
+        //                     operator: '>',
+        //                     value: 5
+        //                 },
+        //                 format: '{point.y}',
+        //                 style: {
+        //                     fontSize: '0.9em',
+        //                     textOutline: 'none'
+        //                 }
+        //             }]
+        //         }
+        //     },
+        //
+        //     tooltip: {
+        //         //headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+        //         pointFormat: '<span style="color:{point.color}">{point.name}</span>: ' +
+        //             '<b>{point.y}</b> of total<br/>'
+        //     },
+        //
+        //     series: [
+        //         {
+        //             colorByPoint: true,
+        //             data: data
+        //         }
+        //     ],
+        // });
+
+    }
+
+    function makeRequestChart(){
+        request_count_chart = Highcharts.chart('request-count-chart', {
             chart: {
                 type: 'column'
             },
@@ -144,7 +278,7 @@
                 name: 'Request Count VS Time',
                 colorByPoint: true,
                 groupPadding: 0,
-                data: data,
+                // data: data,
                 dataLabels: {
                     enabled: true,
                     rotation: -90,
@@ -160,18 +294,9 @@
                 }
             }]
         });
-
-
-
     }
-
-    function populatePageVisitChart(pageVisitCount) {
-        let data = [];
-        pageVisitCount.forEach(function (val, key){
-            data.push({name: key, y: val});
-        });
-
-        Highcharts.chart('page-visit-chart', {
+    function makePageVisitChart(){
+        page_visit_chart = Highcharts.chart('page-visit-chart', {
             chart: {
                 type: 'pie'
             },
@@ -224,15 +349,21 @@
             series: [
                 {
                     colorByPoint: true,
-                    data: data
+                    // data: data
                 }
             ],
         });
-
     }
-
-    $(document).ready(function () {
+    function refreshStat(){
         fetchAndPopulateStat();
+        setTimeout(function () {
+            refreshStat();
+        }, 5000);
+    }
+    $(document).ready(function () {
+        makeRequestChart();
+        makePageVisitChart();
+        refreshStat();
     });
 </script>
 </body>
