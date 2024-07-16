@@ -1,6 +1,7 @@
-package com.alamin.ecommerce.exceptions.handler;
+package com.alamin.ecommerce.exceptions;
 
 import com.alamin.ecommerce.exceptions.clazz.CustomerNotFoundException;
+import com.alamin.ecommerce.exceptions.handler.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
