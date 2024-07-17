@@ -13,6 +13,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class ResponseCustomerMapper implements Function<Customer, ResponseCustomerDTO> {
     private final ResponseAddressMapper responseAddressMapper;
+    //responseAddressMapper.apply(entity.getAddress())
     @Override
     public ResponseCustomerDTO apply(Customer entity) {
         return entity == null ? null :new ResponseCustomerDTO(

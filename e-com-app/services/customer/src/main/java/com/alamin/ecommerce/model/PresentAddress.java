@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Entity(name = "tbl_addresses")
-public class Address extends BaseEntity {
+public class PresentAddress extends BaseEntity {
     private String street;
     private String houseNumber;
     private String zipCode;

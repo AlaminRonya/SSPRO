@@ -1,6 +1,7 @@
 package com.alamin.ecommerce.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,6 @@ public class Customer extends BaseEntity {
     private String firstname;
     private String lastname;
     private String email;
-    private Address address;
+    @OneToOne
+    private PresentAddress address;
 }

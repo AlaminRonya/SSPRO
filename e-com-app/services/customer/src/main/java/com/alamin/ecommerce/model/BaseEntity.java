@@ -19,16 +19,21 @@ import java.util.UUID;
 public class BaseEntity {
     @Id
     @GeneratedValue
+    @Column(columnDefinition = "BINARY(16)")
     private UUID id;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(insertable = true, updatable = false)
     private LocalDate createdAt;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(insertable = false, updatable = true)
     private LocalDate updatedAt;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(insertable = false, updatable = true)
     private LocalDate deletedAt;
+
     private String browser = RequestInfoContextHolder.getBrowser();
     private String createdBy;
     private String updatedBy;
@@ -55,23 +60,14 @@ public class BaseEntity {
     }
 
     private void setCreatedBy() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-//            createdBy = ((UserDetails) authentication.getPrincipal()).getUsername();
-//        }
+        // Set createdBy
     }
 
     private void setUpdatedBy() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-//            updatedBy = ((UserDetails) authentication.getPrincipal()).getUsername();
-//        }
+        // Set updatedBy
     }
 
     private void setDeletedBy() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-//            deletedBy = ((UserDetails) authentication.getPrincipal()).getUsername();
-//        }
+        // Set deletedBy
     }
 }
